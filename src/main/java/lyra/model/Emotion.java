@@ -8,9 +8,14 @@ public class Emotion {
     private int emotionId;
     private String name;
 
-    /** Constructor */
+    /** Emotion Constructor */
     public Emotion(int emotionId, String name) {
         this.emotionId = emotionId;
+        this.name = name;
+    }
+
+    /** Emotion constructor without emotion id */
+    public Emotion(String name) {
         this.name = name;
     }
 
@@ -31,4 +36,9 @@ public class Emotion {
         this.name = name;
     }
 
+    /** Override the to string method to print out an emotion */
+    @Override
+    public String toString() {
+        return "Emotion{id: " + emotionId + ", name: '" + name + "'}";
+    }
 }
