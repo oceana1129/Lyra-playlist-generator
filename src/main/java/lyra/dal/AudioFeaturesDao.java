@@ -1,8 +1,8 @@
 package lyra.dal;
 
-// import lyra.model.Song;
+// import lyra.model.AudioFeatures;
 
-public class SongDao {
+public class AudioFeaturesDao {
     /** Attributes */
 
 

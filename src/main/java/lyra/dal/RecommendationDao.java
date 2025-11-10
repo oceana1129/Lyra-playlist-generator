@@ -1,8 +1,8 @@
 package lyra.dal;
 
-// import lyra.model.Song;
+// import lyra.model.Recommendation;
 
-public class SongDao {
+public class RecommendationDao {
     /** Attributes */
 
 

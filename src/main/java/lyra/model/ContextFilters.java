@@ -1,16 +1,15 @@
 package lyra.model;
 
 /**
- * Song info represents information about a song
+ * ContextFilters represents contextual classifications for a song
  */
-public class SongInfo {
+public class ContextFilters {
     /** Attributes */
-	
+
 
     /** Constructor */
-	
+
 
     /** Getters and setters */
-    
 
 }

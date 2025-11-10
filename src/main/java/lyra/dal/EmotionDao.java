@@ -1,8 +1,8 @@
 package lyra.dal;
 
-// import lyra.model.Song;
+// import lyra.model.Emotion;
 
-public class SongDao {
+public class EmotionDao {
     /** Attributes */
 
 
