@@ -37,6 +37,6 @@ public class Inserter {
         System.out.println("Emotions Before Delete: " + Arrays.toString(currentEmotions.toArray()));
         emotionDao.delete(emotionExample);
         currentEmotions = emotionDao.getAllEmotions();
-        System.out.println("Emotions After Delete: " + Arrays.toString(currentEmotions.toArray()));        
+        System.out.println("Emotions After Delete:  " + Arrays.toString(currentEmotions.toArray()));        
 	}
 }

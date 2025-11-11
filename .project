@@ -28,6 +28,13 @@
 		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>org.eclipse.wst.jsdt.core.jsNature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>resources</name>
+			<type>2</type>
+			<location>C:/Users/ocean/Documents/Code/Lyra-playlist-generator/src/main/resources</location>
+		</link>
+	</linkedResources>
 	<filteredResources>
 		<filter>
 			<id>1762715642490</id>
