@@ -1,23 +1,189 @@
 package lyra.dal;
 
-// import lyra.model.Song;
+import lyra.model.Song;
 
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * DAO for accessing Song data in the database.
+ */
 public class SongDao {
     /** Attributes */
+    protected ConnectionManager connectionManager;
+    private static SongDao instance = null;
 
+    /** Constructor of the SongDao class */
+    public SongDao() {
+        this.connectionManager = new ConnectionManager();
+    }
 
-    /** Constructor */
+    /** Returns single instance of SongDao (singleton). */
+    public static SongDao getInstance() {
+        if (instance == null) {
+            instance = new SongDao();
+        }
+        return instance;
+    }
 
+    /** Create method:
+     *  to create a new song.
+     *  @return the created Song object */
+    public Song create(Song song) throws SQLException {
+        String sql = "INSERT INTO Song(" +
+                "title, album, releaseDate, lengthSeconds, emotionId, " +
+                "keySignature, tempo, loudness, timeSignature, explicit" +
+                ") VALUES(?,?,?,?,?,?,?,?,?,?)";
 
-    /** Create */
+        try (Connection connection = connectionManager.getConnection();
+             PreparedStatement insertStatement =
+                     connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
+            insertStatement.setString(1, song.getTitle());
+            insertStatement.setString(2, song.getAlbum());
 
-    /** Read */
+            if (song.getReleaseDate() != null) {
+                insertStatement.setDate(3, song.getReleaseDate());
+            } else {
+                insertStatement.setNull(3, Types.DATE);
+            }
 
+            insertStatement.setInt(4, song.getLengthSeconds());
 
-    /** Update */
+            if (song.getEmotionId() != null) {
+                insertStatement.setInt(5, song.getEmotionId());
+            } else {
+                insertStatement.setNull(5, Types.INTEGER);
+            }
 
+            insertStatement.setString(6, song.getKeySignature());
 
-    /** Delete */
+            if (song.getTempo() != null) {
+                insertStatement.setDouble(7, song.getTempo());
+            } else {
+                insertStatement.setNull(7, Types.DOUBLE);
+            }
 
+            if (song.getLoudness() != null) {
+                insertStatement.setDouble(8, song.getLoudness());
+            } else {
+                insertStatement.setNull(8, Types.DOUBLE);
+            }
+
+            insertStatement.setString(9, song.getTimeSignature());
+
+            if (song.getExplicit() != null) {
+                insertStatement.setBoolean(10, song.getExplicit());
+            } else {
+                insertStatement.setNull(10, Types.BOOLEAN);
+            }
+
+            insertStatement.executeUpdate();
+
+            try (ResultSet results = insertStatement.getGeneratedKeys()) {
+                if (results.next()) {
+                    song.setSongId(results.getInt(1));
+                }
+            }
+        }
+        return song;
+    }
+
+    /** Read method:
+     * get a song by id.
+     * @param id the primary key of the song
+     * @return the Song object or null if not found */
+    public Song getSongById(int id) throws SQLException {
+        String sql = "SELECT * FROM Song WHERE songId=?";
+
+        try (Connection connection = connectionManager.getConnection();
+             PreparedStatement selectStatement = connection.prepareStatement(sql)) {
+
+            selectStatement.setInt(1, id);
+
+            try (ResultSet results = selectStatement.executeQuery()) {
+                if (results.next()) {
+                    return new Song(
+                            results.getInt("songId"),
+                            results.getString("title"),
+                            results.getString("album"),
+                            results.getDate("releaseDate"),
+                            results.getInt("lengthSeconds"),
+                            (Integer) results.getObject("emotionId"),
+                            results.getString("keySignature"),
+                            results.getObject("tempo") != null ? results.getDouble("tempo") : null,
+                            results.getObject("loudness") != null ? results.getDouble("loudness") : null,
+                            results.getString("timeSignature"),
+                            results.getObject("explicit") != null ? results.getBoolean("explicit") : null
+                    );
+                }
+            }
+        }
+        return null;
+    }
+
+    /** Read method:
+     * list all songs.
+     * @return a List of all Song objects */
+    public List<Song> getAllSongs() throws SQLException {
+        List<Song> songs = new ArrayList<>();
+        String sql = "SELECT * FROM Song";
+
+        try (Connection connection = connectionManager.getConnection();
+             PreparedStatement selectStatement = connection.prepareStatement(sql);
+             ResultSet results = selectStatement.executeQuery()) {
+
+            while (results.next()) {
+                Song song = new Song(
+                        results.getInt("songId"),
+                        results.getString("title"),
+                        results.getString("album"),
+                        results.getDate("releaseDate"),
+                        results.getInt("lengthSeconds"),
+                        (Integer) results.getObject("emotionId"),
+                        results.getString("keySignature"),
+                        results.getObject("tempo") != null ? results.getDouble("tempo") : null,
+                        results.getObject("loudness") != null ? results.getDouble("loudness") : null,
+                        results.getString("timeSignature"),
+                        results.getObject("explicit") != null ? results.getBoolean("explicit") : null
+                );
+                songs.add(song);
+            }
+        }
+        return songs;
+    }
+
+    /** Update method:
+     * update the title of the song.
+     * @param song the Song object to update
+     * @param newTitle the new title to set
+     * @return the updated Song object */
+    public Song updateSongTitle(Song song, String newTitle) throws SQLException {
+        String sql = "UPDATE Song SET title=? WHERE songId=?";
+
+        try (Connection connection = connectionManager.getConnection();
+             PreparedStatement updateStatement = connection.prepareStatement(sql)) {
+
+            updateStatement.setString(1, newTitle);
+            updateStatement.setInt(2, song.getSongId());
+            updateStatement.executeUpdate();
+            song.setTitle(newTitle);
+        }
+        return song;
+    }
+
+    /** Delete method:
+     * deletes a song.
+     * @param song the Song object to delete */
+    public void delete(Song song) throws SQLException {
+        String sql = "DELETE FROM Song WHERE songId=?";
+
+        try (Connection connection = connectionManager.getConnection();
+             PreparedStatement deleteStatement = connection.prepareStatement(sql)) {
+
+            deleteStatement.setInt(1, song.getSongId());
+            deleteStatement.executeUpdate();
+        }
+    }
 }
