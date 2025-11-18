@@ -23,17 +23,25 @@
     <p>These are the songs we recommend for you</p>
 
     <section>
-    	<!-- get a list of the songs
-    		if songs are not null then go through list and dynamically create content
-    		<div class="song"> 
-    			<div>
-    				<h4>song name</h4>
-    				<h5>song artist</h5>
-    			</div>
-    			<img src="" alt="">
-    		</div> 
-    	-->
-        
+    	<c:choose>
+        	<c:when test="${not empty recommendedSongs}">
+            <h2>Recommended Songs:</h2>
+                <c:forEach var="song" items="${recommendedSongs}" varStatus="i">
+				    <div class="song">
+				        <h4>${song.title}</h4>
+				
+				        <h5>
+				            <c:forEach var="a" items="${artistsPerSong[i.index]}" varStatus="loop">
+				                ${a.name}<c:if test="${!loop.last}">, </c:if>
+				            </c:forEach>
+				        </h5>
+				    </div>
+				</c:forEach>
+       		</c:when>
+        <c:otherwise>
+            <p>No matching songs found for your selection.</p>
+        </c:otherwise>
+    </c:choose>
     </section>
 </main>
 

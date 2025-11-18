@@ -179,6 +179,7 @@ public class Inserter {
         System.out.println("Artist Read: " + artistDao.getArtistById(artist1.getArtistId()).getName());
         artist1 = artistDao.updateArtistName(artist1, "ED SHEERAN");
         System.out.println("Artist Updated: " + artist1.getName());
+        artist1 = artistDao.updateArtistName(artist1, "Ed Sheeran");
 
         Artist artistTemp = artistDao.create(new Artist("Temp Artist"));
         System.out.println("Artists Before Delete: " + Arrays.toString(artistDao.getAllArtists().toArray()));
@@ -314,9 +315,9 @@ public class Inserter {
         ));
 
         // Add info to songs
-         ensureSongGenre(songGenreDao, song3.getSongId(), pop.getGenreId());
+        ensureSongGenre(songGenreDao, song3.getSongId(), pop.getGenreId());
         ensureSongGenre(songGenreDao, song4.getSongId(), pop.getGenreId());
-        ensureSongArtist(songArtistDao, song3.getSongId(), artist1.getArtistId());
+        ensureSongArtist(songArtistDao, song3.getSongId(), artist2.getArtistId());
         ensureSongArtist(songArtistDao, song4.getSongId(), artist1.getArtistId());
         ensureAudioFeatures(audioFeaturesDao, song3.getSongId(), 92, 78, 80, 85, 8, 10, 15, 0);
         ensureAudioFeatures(audioFeaturesDao, song4.getSongId(), 88, 75, 70, 80, 7, 12, 18, 0);

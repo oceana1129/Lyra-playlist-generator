@@ -59,6 +59,8 @@ public class SongFinder {
                 }
             }
             if (genreHit) score += 1.5;
+            
+            // TODO: implement activity match (like yoga or running)
 
             // Audio Features Match
             AudioFeatures af = audioDao.getBySongId(song.getSongId());
