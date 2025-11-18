@@ -300,5 +300,57 @@ public class Inserter {
         System.out.println("Recommendations After  Delete: " +
                 Arrays.toString(recommendationDao.getAllRecommendations().toArray()));
         System.out.println();
+        
+        System.out.println("=== Testing SongFinder ===");
+        
+        // Add some similar songs for "Shape of You"
+        Song song3 = songDao.create(new Song(
+                "Perfect", "Divide", Date.valueOf("2017-03-03"),
+                263, happy.getEmotionId(), "G", 95.0, -3.0, "4/4", false
+        ));
+        Song song4 = songDao.create(new Song(
+                "Castle on the Hill", "Divide", Date.valueOf("2017-01-06"),
+                261, happy.getEmotionId(), "D", 85.0, -4.0, "4/4", false
+        ));
+
+        // Add info to songs
+         ensureSongGenre(songGenreDao, song3.getSongId(), pop.getGenreId());
+        ensureSongGenre(songGenreDao, song4.getSongId(), pop.getGenreId());
+        ensureSongArtist(songArtistDao, song3.getSongId(), artist1.getArtistId());
+        ensureSongArtist(songArtistDao, song4.getSongId(), artist1.getArtistId());
+        ensureAudioFeatures(audioFeaturesDao, song3.getSongId(), 92, 78, 80, 85, 8, 10, 15, 0);
+        ensureAudioFeatures(audioFeaturesDao, song4.getSongId(), 88, 75, 70, 80, 7, 12, 18, 0);
+
+        // Create the recommendations
+        recommendationDao.create(new Recommendation(song1.getSongId(), song3.getSongId(), 0.95));
+        recommendationDao.create(new Recommendation(song1.getSongId(), song4.getSongId(), 0.90));
+
+        // SongFinder instance
+	     SongFinder finder = new SongFinder();
+	
+	     // Example input for finding a matching song
+	     String[] emotions = {"happy"};
+	     String[] genres = {"pop"};
+	     int popularity = 97; 
+	     int energy = 80;
+	     int danceability = 75;
+	     int positivity = 70;
+	     int instrumentalness = 0;
+	
+	     Song matchedSong = finder.findMatchingSong(emotions, genres, popularity, energy, danceability, positivity, instrumentalness);
+	
+	     if (matchedSong != null) {
+	         System.out.println("Matched Song: " + matchedSong.getTitle());
+	         // Find similar songs
+	         List<Recommendation> recs = recommendationDao.getRecommendationsBySongId(matchedSong.getSongId());
+	         System.out.println(recs);
+	         // Sort descending by similarityScore
+	         recs.sort((rec1, rec2) -> Double.compare(rec2.getSimilarityScore(), rec1.getSimilarityScore()));
+
+	         System.out.println("Songs most similar to " + matchedSong.getTitle() + ":");
+	         System.out.println(recs);
+	     } else {
+	         System.out.println("No matching song found.");
+	     }
     }
 }

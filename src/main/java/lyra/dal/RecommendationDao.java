@@ -77,6 +77,35 @@ public class RecommendationDao {
         }
         return null;
     }
+    
+    /** Read method:
+     * Get all Recommendation objects for a given songId.
+     * @param songId the primary key of the song
+     * @return a list of Recommendation objects, or an empty list if none found
+     */
+    public List<Recommendation> getRecommendationsBySongId(int songId) throws SQLException {
+        List<Recommendation> recommendations = new ArrayList<>();
+        String sql = "SELECT * FROM Recommendation WHERE songId=?";
+
+        try (Connection connection = connectionManager.getConnection();
+             PreparedStatement selectStatement = connection.prepareStatement(sql)) {
+            selectStatement.setInt(1, songId);
+
+            try (ResultSet results = selectStatement.executeQuery()) {
+                while (results.next()) {
+                    recommendations.add(new Recommendation(
+                            results.getInt("recommendationId"),
+                            results.getInt("songId"),
+                            results.getInt("similarSongId"),
+                            results.getDouble("similarityScore")
+                    ));
+                }
+            }
+        }
+        return recommendations;
+    }
+
+
 
     /** Read method:
      * list all recommendations.
