@@ -23,6 +23,11 @@ public class SongFinder {
         GenreDao genreDao = GenreDao.getInstance();
         SongGenreDao songGenreDao = SongGenreDao.getInstance();
         AudioFeaturesDao audioDao = AudioFeaturesDao.getInstance();
+        
+        if (emotions == null || emotions.length == 0 ||
+            genres == null || genres.length == 0) {
+            return null; // caller should handle this as "no valid input"
+        }
 
         // convert to lowercase for easy matching
         List<String> emotionList = Arrays.stream(emotions)

@@ -27,16 +27,28 @@ public class FindSongs extends HttpServlet {
             String[] selectedEmotions = req.getParameterValues("emotion");
             String[] selectedGenres = req.getParameterValues("genre");
             String[] selectedActivity = req.getParameterValues("activity");
-            int popularity = Integer.parseInt(req.getParameter("popularity"));
-            int energy = Integer.parseInt(req.getParameter("energy"));
-            int danceability = Integer.parseInt(req.getParameter("danceability"));
-            int positivity = Integer.parseInt(req.getParameter("positivity"));
-            int instrumentalness = Integer.parseInt(req.getParameter("instrumentalness"));
+
+            // Parse numeric sliders
+            int popularity        = Integer.parseInt(req.getParameter("popularity"));
+            int energy            = Integer.parseInt(req.getParameter("energy"));
+            int danceability      = Integer.parseInt(req.getParameter("danceability"));
+            int positivity        = Integer.parseInt(req.getParameter("positivity"));
+            int instrumentalness  = Integer.parseInt(req.getParameter("instrumentalness"));
+
+            // Validation
+            if (selectedEmotions == null || selectedEmotions.length == 0 ||
+                selectedGenres == null   || selectedGenres.length == 0) {
+
+                req.setAttribute("error", "Please select at least one emotion and one genre.");
+                req.getRequestDispatcher("form.jsp").forward(req, resp);
+                return;
+            }
 
             // Find the best matching song
             SongFinder finder = new SongFinder();
             Song matchedSong = finder.findMatchingSong(
-                    selectedEmotions, selectedGenres, popularity, energy, danceability, positivity, instrumentalness
+                    selectedEmotions, selectedGenres,
+                    popularity, energy, danceability, positivity, instrumentalness
             );
 
             List<Song> recommendedSongs = new ArrayList<>();
@@ -56,7 +68,7 @@ public class FindSongs extends HttpServlet {
                 // get recommended songs
                 List<Recommendation> recommendations =
                         recommendationDao.getRecommendationsBySongId(matchedSong.getSongId());
-                
+
                 // sort recommended songs on similarity score
                 recommendations.sort((a, b) -> Double.compare(b.getSimilarityScore(), a.getSimilarityScore()));
 
@@ -64,19 +76,15 @@ public class FindSongs extends HttpServlet {
                     Song song = songDao.getSongById(r.getSimilarSongId());
                     if (song != null) {
                         recommendedSongs.add(song);
-
-                        // Load and store artists for this song
-                        List<Artist> artists = getArtistsForSong(song, songArtistDao, artistDao);
-                        artistsPerSong.add(artists);
+                        artistsPerSong.add(getArtistsForSong(song, songArtistDao, artistDao));
                     }
                 }
             }
 
-            // pass to JSP
+            // Pass to JSP
             req.setAttribute("recommendedSongs", recommendedSongs);
             req.setAttribute("artistsPerSong", artistsPerSong);
 
-            // forward to results.jsp
             req.getRequestDispatcher("/results.jsp").forward(req, resp);
 
         } catch (SQLException e) {
@@ -85,7 +93,7 @@ public class FindSongs extends HttpServlet {
             throw new ServletException("Invalid number format in form input", e);
         }
     }
-    
+
     /** Load artists for a Song using SongArtist and Artist tables */
     private List<Artist> getArtistsForSong(
             Song song,
@@ -95,8 +103,7 @@ public class FindSongs extends HttpServlet {
 
         List<Artist> artists = new ArrayList<>();
 
-        List<SongArtist> mappings =
-                songArtistDao.getBySongId(song.getSongId());
+        List<SongArtist> mappings = songArtistDao.getBySongId(song.getSongId());
 
         for (SongArtist map : mappings) {
             Artist artist = artistDao.getArtistById(map.getArtistId());
@@ -107,3 +114,4 @@ public class FindSongs extends HttpServlet {
         return artists;
     }
 }
+

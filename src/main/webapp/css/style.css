@@ -121,15 +121,6 @@ h2 {
   font-size: 4.5em;
 }
 
-h3 {
-}
-
-h4 {
-}
-
-h5 {
-}
-
 p,
 header span {
   font-size: 1.6em;
@@ -140,6 +131,7 @@ header span {
 
 /* Interactables */
 button {
+  width: 100%;
   background-image: var(--gradient-pink-purple);
   color: var(--grey-dark);
   font-weight: 700;
@@ -191,6 +183,14 @@ input[type="checkbox"] + label:hover {
   ========================================
 */
 /* body */
+.width {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+  justify-content: center;
+}
+
 body {
   background-image: var(--background);
   min-height: 100vh;
@@ -202,8 +202,13 @@ body {
 h1,
 h1 + p,
 h2,
-h2 + p {
+h2 + p, 
+h2 + p + p {
   text-align: center;
+}
+
+.centerMe {
+	text-align: center;
 }
 
 h1 + p,
@@ -219,6 +224,9 @@ section {
   display: flex;
   flex-direction: column;
   justify-content: center;
+}
+padding-bottom {
+	height: 10vh;
 }
 
 /* Header */
