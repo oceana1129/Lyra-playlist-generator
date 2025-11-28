@@ -70,6 +70,30 @@ public class SongGenreDao {
         return null;
     }
 
+    public List<SongGenre> getSongGenresBySongId(int songId) throws SQLException {
+        List<SongGenre> result = new ArrayList<>();
+
+        String sql = "SELECT songId, genreId FROM SongGenre WHERE songId=?";
+
+        try (Connection connection = connectionManager.getConnection();
+             PreparedStatement selectStatement = connection.prepareStatement(sql)) {
+
+            selectStatement.setInt(1, songId);
+
+            try (ResultSet results = selectStatement.executeQuery()) {
+                while (results.next()) {
+                    result.add(new SongGenre(
+                            results.getInt("songId"),
+                            results.getInt("genreId")
+                    ));
+                }
+            }
+        }
+
+        return result;
+    }
+
+    
     /** Read method:
      * list all song-genre mappings.
      * @return a List of all SongGenre objects */
