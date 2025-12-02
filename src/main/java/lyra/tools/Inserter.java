@@ -131,6 +131,17 @@ public class Inserter {
     }
 
     public static void main(String[] args) throws SQLException {
+
+        try (java.sql.Connection c = new ConnectionManager().getConnection();
+             java.sql.PreparedStatement ps =
+                     c.prepareStatement("SELECT COUNT(*) AS cnt FROM Song");
+             java.sql.ResultSet rs = ps.executeQuery()) {
+
+            if (rs.next()) {
+                System.out.println(">>> Song count from DB = " + rs.getInt("cnt"));
+            }
+        }
+
         GenreDao genreDao = GenreDao.getInstance();
         SongGenreDao songGenreDao = SongGenreDao.getInstance();
         RecommendationDao recommendationDao = RecommendationDao.getInstance();
@@ -301,7 +312,8 @@ public class Inserter {
         System.out.println("Recommendations After  Delete: " +
                 Arrays.toString(recommendationDao.getAllRecommendations().toArray()));
         System.out.println();
-        
+
+        /*
         System.out.println("=== Testing SongFinder ===");
         
         // Add some similar songs for "Shape of You"
@@ -353,5 +365,6 @@ public class Inserter {
 	     } else {
 	         System.out.println("No matching song found.");
 	     }
+         */
     }
 }
