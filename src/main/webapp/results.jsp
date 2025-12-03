@@ -40,17 +40,21 @@
 <body>
 
 <header>
-    <img
-            src="https://res.cloudinary.com/oceana-web-designs/image/upload/v1764196146/lyra-logo_zthqse.png"
-            alt="Lyra logo"
-    />
-    <span class="source">from Spotify Songs</span>
+    <a href="index.jsp">
+	    <img
+	        src="https://res.cloudinary.com/oceana-web-designs/image/upload/v1764196146/lyra-logo_zthqse.png"
+	        alt="Lyra logo"
+	      />
+    </a>
+    <a href="https://open.spotify.com/" target="_blank">
+      	<span class="source">from Spotify Songs</span>
+      </a>
 </header>
 
 <main>
     <section>
         <h1>Your Playlist</h1>
-        <p>These are the songs we recommend for you</p>
+        <p>These are the songs we recommend for you:</p>
 
         <c:choose>
             <c:when test="${not empty recommendedSongs}">

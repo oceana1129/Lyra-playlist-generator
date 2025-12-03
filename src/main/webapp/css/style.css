@@ -133,7 +133,7 @@ button {
     color: var(--grey-dark);
     font-weight: 700;
     min-height: 36px;
-    padding: 0 16px;
+    padding: 0 32px;
     border-radius: 16px;
     border: none;
     transition: all 0.3s;
@@ -143,6 +143,10 @@ button:hover {
     cursor: pointer;
     color: var(--black);
     transition: all 0.3s;
+}
+
+p + form button {
+	width: auto;
 }
 
 input[type="checkbox"] {
@@ -172,6 +176,7 @@ input[type="checkbox"]:checked + label {
 
 input[type="checkbox"] + label:hover {
     cursor: pointer;
+        background-color: var(--white-15);
 }
 
 /*
@@ -213,12 +218,12 @@ h2 + p {
 }
 
 section {
-    max-width: 1120px;
+    max-width: 900px;
     width: 90vw;
     min-height: 80vh;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
+    justify-content: center;
     margin: 40px auto 80px auto;
 }
 

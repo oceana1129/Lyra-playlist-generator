@@ -43,11 +43,15 @@
 
   <body>
      <header>
-       <img
-         src="https://res.cloudinary.com/oceana-web-designs/image/upload/v1764196146/lyra-logo_zthqse.png"
-         alt="Lyra logo"
-       />
-       <span class="source">from Spotify Songs</span>
+       <a href="index.jsp">
+		    <img
+		        src="https://res.cloudinary.com/oceana-web-designs/image/upload/v1764196146/lyra-logo_zthqse.png"
+		        alt="Lyra logo"
+	      />
+	    </a>
+       <a href="https://open.spotify.com/" target="_blank">
+      	<span class="source">from Spotify Songs</span>
+      </a>
      </header>
 
     <form action="results" method="POST">
